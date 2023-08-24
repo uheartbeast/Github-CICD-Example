@@ -1,5 +1,9 @@
+name: "Publish to Github Pages"
+
 on:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 
@@ -10,7 +14,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+    
       - name: Create staging directory
         run: mkdir -v -p builds/web
 
@@ -21,6 +25,11 @@ jobs:
           use-dotnet: false
       - name: Build
         run: godot -v --headless --export-release "Web" ../builds/web/index.html project/project.godot
+
+      - name: Move HTML5 templates into position
+        run: |
+          mkdir -v -p ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/4.1.stable
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
