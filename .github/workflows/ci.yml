@@ -28,7 +28,7 @@ jobs:
         run: mkdir -v -p Builds/HTML5
 
       - name: Build
-        run: godot -v --export-release --headless "Web" ../Builds/HTML5/index.html Project/project.godot
+        run: godot -v --export-release --headless "Web" ../Builds/HTML5/index.html project/project.godot
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
