@@ -1,0 +1,31 @@
+on:
+  push:
+  workflow_dispatch:
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    container:
+      image: barichello/godot-ci:4.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create staging directory
+        run: mkdir -v -p builds/web
+
+      - name: Build
+        run: godot -v --headless --export-release "HTML5" ../builds/web/index.html project/project.godot
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./builds/web
+          force_orphan: true
+          user_name: 'github-ci[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Publish to gh-pages'
