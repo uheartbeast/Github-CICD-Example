@@ -1,4 +1,7 @@
-name: "Publish to Github Pages"
+name: 'Publish to Github Pages'
+
+env:
+  GODOT_VERSION: 4.1
 
 on:
   push:
@@ -6,36 +9,32 @@ on:
       - main
   workflow_dispatch:
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    container:
+      image: barichello/godot-ci:4.1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-    
-      - name: Create staging directory
-        run: mkdir -v -p builds/web
-
-      - name: Setup Godot
-        uses: chickensoft-games/setup-godot@v1
-        with:
-          version: 4.1.0
-          use-dotnet: false
-      - name: Build
-        run: godot -v --headless --export-release "Web" ../builds/web/index.html project/project.godot
 
       - name: Move HTML5 templates into position
         run: |
           mkdir -v -p ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/4.1.stable
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+      - name: Create staging directory
+        run: mkdir -v -p Builds/HTML5
+
+      - name: Build
+        run: godot -v --export-release --headless "Web" ../Builds/HTML5/index.html Project/project.godot
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./builds/web
+          publish_dir: ./Builds/HTML5
           force_orphan: true
           user_name: 'github-ci[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
