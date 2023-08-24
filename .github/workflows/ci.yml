@@ -7,9 +7,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    container:
-      image: barichello/godot-ci:4.1
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -17,6 +14,10 @@ jobs:
       - name: Create staging directory
         run: mkdir -v -p builds/web
 
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          versioni: 4.1.0
       - name: Build
         run: godot -v --headless --export-release "Web" ../builds/web/index.html project/project.godot
 
