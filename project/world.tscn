@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://7xyal4g7ot23"]
+
+[node name="World" type="Node2D"]
+
+[node name="Node" type="Node" parent="."]
+
+[node name="CenterContainer" type="CenterContainer" parent="Node"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Node/CenterContainer"]
+layout_mode = 2
+text = "Hello World!"
